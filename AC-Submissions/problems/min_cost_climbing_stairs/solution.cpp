@@ -1,25 +1,15 @@
 class Solution {
     int dp[1010];
-    vector<int>vals;
 public:
-    void init(int n, int x, int y){
-        for(int i=0;i<n;i++)dp[i]=-1;
-        dp[n-1]=y;
-        dp[n-2]=x;
-    }
-    int goBro(int n){
-        if(dp[n]!=-1)return dp[n];
-        dp[n]=vals[n];
-        int tmp=min(goBro(n+1),goBro(n+2));
-        dp[n]+=tmp;
-        return dp[n];
+    int ctDp(int idx, vector<int>& cost){
+        if(idx==0||idx==1)return cost[idx];
+        if(dp[idx]!=-1)return dp[idx];
+        dp[idx]=cost[idx]+min(ctDp(idx-1,cost),ctDp(idx-2,cost));
+        return dp[idx];
     }
     int minCostClimbingStairs(vector<int>& cost) {
-        vals=cost;
         int len=cost.size();
-        init(len,cost[len-2],cost[len-1]);
-        int ans=goBro(0);
-        ans=min(dp[0],dp[1]);
-        return ans;
+        for(int i=0;i<1010;i++)dp[i]=-1;
+        return min(ctDp(len-2,cost),ctDp(len-1,cost));
     }
 };
