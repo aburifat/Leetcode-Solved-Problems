@@ -1,55 +1,39 @@
-#include<iostream>
-#include<vector>
-#include<map>
-#include<queue>
-using namespace std;
-
-map<pair<int,int>,int>visited;
-
-int dx[]={0,0,1,-1};
-int dy[]={1,-1,0,0};
-
-int bfs(vector<vector<int>>adj, int sr, int sc, int n, int m){
-    queue<pair<int,int>>q;
-    q.push({sr,sc});
-    visited[{sr,sc}]=true;
-    int area=0;
-    while(!q.empty()){
-        sr=q.front().first;
-        sc=q.front().second;
-        q.pop();
-        area++;
-        for(int i=0;i<4;i++){
-            int u=sr+dx[i];
-            int v=sc+dy[i];
-            if(u>=0&&v>=0&&u<n&&v<m){
-                if(!visited[{u,v}]&&adj[u][v]==1){
-                    visited[{u,v}]=true;
-                    q.push({u,v});
+class Solution {
+    int dx[4]={1,-1,0,0};
+    int dy[4]={0,0,1,-1};
+    int visit(vector<vector<int>>& grid, int x, int y){
+        int siz=1;
+        queue<pair<int,int>>q;
+        q.push({x,y});
+        grid[x][y]=0;
+        while(!q.empty()){
+            x=q.front().first;
+            y=q.front().second;
+            q.pop();
+            for(int i=0;i<4;i++){
+                int u=x+dx[i];
+                int v=y+dy[i];
+                if(u>=0&&u<grid.size()&&v>=0&&v<grid[0].size()){
+                    if(grid[u][v]==1){
+                        grid[u][v]=0;
+                        q.push({u,v});
+                        siz++;
+                    }
                 }
             }
         }
+        return siz;
     }
-    return area;
-}
-
-class Solution {
 public:
     int maxAreaOfIsland(vector<vector<int>>& grid) {
-        vector<vector<int>>adj=grid;
-        visited.clear();
-        int n=adj.size();
-        int m=0;
-        if(n!=0)m=adj[0].size();
-        int mx_area=0;
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(adj[i][j]==1&&!visited[{i,j}]){
-                    int area=bfs(adj,i,j,n,m);
-                    mx_area=max(mx_area,area);
+        int ans=0;
+        for(int i=0;i<grid.size();i++){
+            for(int j=0;j<grid[0].size();j++){
+                if(grid[i][j]==1){
+                    ans=max(ans,visit(grid,i,j));
                 }
             }
         }
-        return mx_area;
+        return ans;
     }
 };
