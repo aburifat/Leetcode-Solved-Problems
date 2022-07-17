@@ -1,24 +1,19 @@
-#include<bits/stdc++.h>
-using namespace std;
-typedef long long ll;
-
 class Solution {
 public:
     string longestCommonPrefix(vector<string>& strs) {
-        auto arrStr=strs;
-        ll len=arrStr.size();
-        string pat=arrStr[0];
-        ll ans=LONG_LONG_MAX;
-        for(ll i=0;i<len;i++){
-            ll ct=0;
-            for(ll j=0;j<arrStr[i].size();j++){
-                if(pat[j]==arrStr[i][j])ct++;
-                else break;
-            }
-            ans=min(ans,ct);
+        int len=strs.size();
+        int idx=strs[0].size();
+        int sz0=idx;
+        for(int i=1;i<len;i++){
+            int sz=strs[i].size();
+            int tmp=0;
+            for(int j=0;j<min(sz,sz0);j++){
+                if(strs[0][j]!=strs[i][j])break;
+                tmp++;
+                }
+            idx=min(idx,tmp);
         }
-        string st="";
-        for(ll i=0;i<ans;i++)st+=pat[i];
-        return st;
+        string s=strs[0].substr(0,idx);
+        return s;
     }
 };
