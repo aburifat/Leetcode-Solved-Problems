@@ -1,51 +1,25 @@
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/tree_policy.hpp>
+
+using namespace __gnu_pbds;
+
+typedef tree<
+int,
+null_type,
+less_equal<int>,
+rb_tree_tag,
+tree_order_statistics_node_update>
+ordered_set;
+
 class Solution {
-    vector<int>idx,ct;
 public:
-    void margeSort(int l, int r, vector<int>& nums){
-        if(l<r){
-            int mid=l+(r-l)/2;
-            margeSort(l,mid,nums);
-            margeSort(mid+1,r,nums);
-            vector<int>vals;
-            int i=l,j=mid+1;
-            for(i=l,j=mid+1;i<=mid&&j<=r;){
-                int len=vals.size();
-                if(nums[idx[i]]>nums[idx[j]]){
-                    vals.push_back(idx[j]);
-                    if(len>(j-l))ct[idx[j]]+=abs(len-j+l);
-                    j++;
-                }else{
-                    vals.push_back(idx[i]);
-                    if(len>(i-l))ct[idx[i]]+=abs(len-i+l);
-                    i++;
-                }
-            }
-            while(i<=mid){
-                int len=vals.size();
-                vals.push_back(idx[i]);
-                if(len>(i-l))ct[idx[i]]+=abs(len-i+l);
-                i++;
-            }
-            while(j<=r){
-                int len=vals.size();
-                vals.push_back(idx[j]);
-                if(len>(j-l))ct[idx[j]]+=abs(len-j+l);
-                j++;
-            }
-            for(int k=0;k<vals.size();k++){
-                idx[l+k]=vals[k];
-            }
-        }
-    }
     vector<int> countSmaller(vector<int>& nums) {
+        ordered_set oss;
         int len=nums.size();
-        idx.clear();
-        ct.clear();
-        for(int i=0;i<len;i++){
-            idx.push_back(i);
-            ct.push_back(0);
+        for(int i=nums.size()-1;i>=0;i--){
+            oss.insert(nums[i]);
+            nums[i]=oss.order_of_key(nums[i]);
         }
-        margeSort(0,len-1,nums);
-        return ct;
+        return nums;
     }
 };
