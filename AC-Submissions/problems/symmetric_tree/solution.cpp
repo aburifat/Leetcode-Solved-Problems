@@ -10,19 +10,18 @@
  * };
  */
 class Solution {
-public:
-    bool ckTrees(TreeNode* p, TreeNode* q){
-        if(!p||!q)return p==q;
-        if(p->val!=q->val)return false;
-        bool ckLeft=ckTrees(p->left,q->right);
-        bool ckRight=ckTrees(p->right,q->left);
-        if(!ckLeft||!ckRight)return false;
-        return true;
+    bool ck(TreeNode* l, TreeNode* r){
+        if(l==nullptr&&r==nullptr)return true;
+        else if(l==nullptr)return false;
+        else if(r==nullptr)return false;
+        if(l->val!=r->val)return false;
+        bool val1=ck(l->left,r->right);
+        bool val2=ck(l->right,r->left);
+        if(val1&&val2)return true;
+        else return false;
     }
+public:
     bool isSymmetric(TreeNode* root) {
-        TreeNode* p=root->left;
-        TreeNode* q=root->right;
-        bool ans=ckTrees(p,q);
-        return ans;
+        return ck(root->left,root->right);
     }
 };
