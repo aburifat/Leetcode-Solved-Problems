@@ -10,17 +10,14 @@
  * };
  */
 class Solution {
-public:
-    int getLevel(int level, TreeNode* node){
-        if(node){
-            int leftLevel=getLevel(level+1,node->left);
-            int rightLevel=getLevel(level+1,node->right);
-            level=max(level,max(leftLevel,rightLevel));
-        }
-        return level;
+    int getDepth(TreeNode* node){
+        if(node==nullptr)return 0;
+        int dpt=max(getDepth(node->left),getDepth(node->right));
+        dpt++;
+        return dpt;
     }
+public:
     int maxDepth(TreeNode* root) {
-        int level=getLevel(0,root);
-        return level;
+        return getDepth(root);
     }
 };
