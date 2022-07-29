@@ -1,26 +1,24 @@
 // The API isBadVersion is defined for you.
 // bool isBadVersion(int version);
-#include<bits/stdc++.h>
-using namespace std;
-
-int mx;
-
-int bs(int l, int r){
-    if(l>r)return mx+5;
-    if(l==r){
-        if(isBadVersion(l)==false)return mx+5;
-        else return l;
-    }
-    int mid=l+(r-l)/2;
-    if(isBadVersion(mid)==true)return min(mid,bs(l,mid));
-    else return bs(mid+1,r);
-}
 
 class Solution {
+    int BS(int l, int r){
+        if(l>r)return INT_MAX;
+        int mid=l+(r-l)/2;
+        bool ck=isBadVersion(mid);
+        if(l==r){
+            if(ck)return l;
+            else return INT_MAX;
+        }
+        else if(ck==true){
+            return min(mid,BS(l,mid-1));
+        }else{
+            return BS(mid+1,r);
+        }
+    }
 public:
     int firstBadVersion(int n) {
-        mx=n;
-        int ans=bs(1,n);
+        int ans=BS(1,n);
         return ans;
     }
 };
