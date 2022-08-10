@@ -10,19 +10,28 @@
  * };
  */
 class Solution {
-public:
-    TreeNode* buildTree(vector<int>& nums,int l, int r){
-        if(l>r)return nullptr;
+    void build_bst(TreeNode* head, vector<int>& nums, int l, int r){
+        if(l>r)return;
         int mid=l+(r-l)/2;
-        TreeNode* node=new TreeNode();
-        node->val=nums[mid];
-        node->left=buildTree(nums,l,mid-1);
-        node->right=buildTree(nums,mid+1,r);
-        return node;
+        head->val=nums[mid];
+        TreeNode* left=new TreeNode();
+        TreeNode* right=new TreeNode();
+        if(l!=r){
+            if(mid!=l){
+                head->left=left;
+                build_bst(left,nums,l,mid-1);
+            }
+            if(mid!=r){
+                head->right=right;
+                build_bst(right,nums,mid+1,r);
+            }
+        }
     }
+public:
     TreeNode* sortedArrayToBST(vector<int>& nums) {
         int len=nums.size();
-        TreeNode* head=buildTree(nums,0,len-1);
+        TreeNode* head=new TreeNode();
+        build_bst(head,nums,0,len-1);
         return head;
     }
 };
