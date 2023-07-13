@@ -1,52 +1,30 @@
 class Solution {
     vector<vector<int>>adj;
-    vector<int>indeg;
-    vector<bool>in_stack,visited;
-public:
-    bool dfs(int s){
-        visited[s]=true;
-        in_stack[s]=true;
-        int len=adj[s].size();
-        for(int i=0;i<len;i++){
-            int u=adj[s][i];
-            if(in_stack[u])return false;
-            if(!visited[u]){
-                bool ck=dfs(u);
-                if(!ck)return ck;
+    vector<int>color;
+    bool ck = true;
+    void dfs(int v){
+        color[v]=1;
+        for(auto u:adj[v]){
+            if(color[u]==0)dfs(u);
+            else if(color[u]==1){
+                ck=false;
+                return;
             }
         }
-        in_stack[s]=false;
-        return true;
+        color[v]=2;
     }
-    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        adj.assign(numCourses+5,vector<int>());
-        indeg.assign(numCourses+5,0);
-        in_stack.assign(numCourses+5,false);
-        visited.assign(numCourses+5,false);
-        int len=prerequisites.size();
-        for(int i=0;i<len;i++){
-            adj[prerequisites[i][0]].push_back(prerequisites[i][1]);
-            indeg[prerequisites[i][1]]++;
+public:
+    bool canFinish(int n, vector<vector<int>>& pre) {
+        adj.assign(n,vector<int>());
+        color.assign(n,0);
+        for(int i=0;i<(int)pre.size();i++){
+            adj[pre[i][1]].push_back(pre[i][0]);
         }
-        vector<int>roots;
-        for(int i=0;i<numCourses;i++){
-            if(indeg[i]==0)roots.push_back(i);
+        for(int i=0;i<n;i++){
+            if(color[i]==0)
+                dfs(i);
+                if(!ck)break;
         }
-        bool ck=true;
-        for(int i=0;i<roots.size();i++){
-            if(!visited[roots[i]]){
-                ck=dfs(roots[i]);
-                if(ck==false)break;
-            }
-        }
-        if(ck){
-            for(int i=0;i<numCourses;i++){
-                if(!visited[i]){
-                    ck=dfs(i);
-                    if(ck==false)break;
-                }
-            }
-        } 
         return ck;
     }
 };
