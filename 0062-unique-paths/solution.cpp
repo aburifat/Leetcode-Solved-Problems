@@ -1,19 +1,14 @@
 class Solution {
 public:
-    int dx[2]={-1,0};
-    int dy[2]={0,-1};
-    int dp[110][110];
-    int ctDp(int row, int col){
-        if(row<0||col<0)return 0;
-        if(row==0&&col==0)return 1;
-        if(dp[row][col]!=-1)return dp[row][col];
-        return dp[row][col]=(ctDp(row+dx[0],col+dy[0])+ctDp(row+dx[1],col+dy[1]));
+    int dp(int i, int j, int m, int n, vector<vector<int>>& mem){
+        if(i>=m||j>=n)return 0;
+        if(i==m-1&&j==n-1)return 1;
+        if(mem[i][j]!=-1)return mem[i][j];
+        return mem[i][j]=dp(i+1,j,m,n,mem)+dp(i,j+1,m,n,mem);
     }
     int uniquePaths(int m, int n) {
-        for(int i=0;i<110;i++){
-            for(int j=0;j<110;j++)dp[i][j]=-1;
-        }
-        int ans=ctDp(m-1,n-1);
+        vector<vector<int>>mem(m,vector<int>(n,-1));
+        int ans = dp(0,0,m,n,mem);
         return ans;
     }
 };
