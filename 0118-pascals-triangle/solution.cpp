@@ -2,13 +2,15 @@ class Solution {
 public:
     vector<vector<int>> generate(int numRows) {
         vector<vector<int>>ans;
-        vector<int>demo;
-        for(int i=0;i<numRows;i++){
-            ans.push_back(demo);
-            for(int j=0;j<=i;j++){
-                if(j==0||j==i)ans[i].push_back(1);
-                else ans[i].push_back(ans[i-1][j]+ans[i-1][j-1]);
+        for(int row=0;row<numRows;row++){
+            ans.push_back(vector<int>(1,1));
+            if(row==0)continue;
+            if(row>=2){
+                for(int i=0;i<row-1;i++){
+                    ans[row].push_back(ans[row-1][i]+ans[row-1][i+1]);
+                }
             }
+            ans[row].push_back(1);
         }
         return ans;
     }
