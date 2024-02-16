@@ -5,15 +5,18 @@ on:
   schedule:
     - cron:  '0 0 * * *'
 
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Sync
-      uses: joshcai/leetcode-sync@v1.4
-      with:
-        github-token: ${{ github.token }}
-        leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
-        leetcode-session: ${{ secrets.LEETCODE_SESSION }}
-        destination-folder: "AC-Submissions"
+      - name: Sync
+        uses: joshcai/leetcode-sync@v1.5
+        with:
+          github-token: ${{ github.token }}
+          leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
+          leetcode-session: ${{ secrets.LEETCODE_SESSION }}
+          destination-folder: "AC-Submissions"
+          verbose: true
+          commit-header: '[LeetCode Sync]'
