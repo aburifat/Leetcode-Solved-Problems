@@ -1,18 +1,13 @@
 public class Solution {
     public int LengthOfLastWord(string s) {
-        int len=s.Length;
-        int ct=0;
-        bool ck=true;
-        for(int i=0;i<len;i++){
-            if(s[i]==' ')ck=true;
-            else{
-                if(ck==true){
-                    ct=0;
-                    ck=false;
-                }
-                ct+=1;
-            }
+        int mx = 0;
+        int l = 0, r = s.Length - 1;
+        while(l <= r && s[l] == ' ')l++;
+        while(l <= r && s[r] == ' ')r--;
+        for(int i = l; i <= r; i++){
+            if(s[i] == ' ') mx = 0;
+            else mx++;
         }
-        return ct;
+        return mx;
     }
 }
