@@ -1,32 +1,65 @@
 public class Solution {
+    int[] pat;
+    int[][] mem;
+
+    private bool ckValid(int l, int r) {
+        for(int i = 0; i < 52; i++) {
+            if(mem[r][i] - ((l == 0) ? 0 : mem[l-1][i]) < pat[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public string MinWindow(string s, string t) {
-        if(s == "" || t == "")return "";
+        pat = new int[52];
+        mem = new int[s.Length][];
 
-        int start = 0, end = 0, startIdx = 0, rem = t.Length, minLen = int.MaxValue;
-
-        int[] cnt = new int[128];
-
-        for(int i=0;i<(int)t.Length; i++){
-            cnt[t[i]]++;
-        }
-
-        while(end < s.Length){
-            if(cnt[s[end++]]-- > 0){ // Increasing the length to get a solution
-                rem--;
+        for(int i = 0; i < t.Length; i++) {
+            if(t[i] >= 'a' && t[i] <= 'z') {
+                pat[t[i] - 'a']++;
             }
-            while(rem == 0){ // While the solution is valid
-                if(minLen > end - start){ // Recording the smallest solution
-                    startIdx = start;
-                    minLen = end - start;
-                }
-                if(cnt[s[start++]]++ == 0){ //Trying to reduce from the front to minimize the solution
-                    rem++;
-                }
+            else {
+                pat[t[i] - 'A' + 26]++;
             }
         }
 
-        return minLen == int.MaxValue ? "" : s.Substring(startIdx, minLen);
+        int minLen = s.Length + 1;
+        int minStart = 0;
 
-        return "";
+        for(int i = 0; i < s.Length; i++) {
+            mem[i] = new int[52];
+
+            if(s[i] >= 'a' && s[i] <= 'z') {
+                mem[i][s[i] - 'a']++;
+            }
+            else {
+                mem[i][s[i] - 'A' + 26]++;
+            }
+            if(i != 0) {
+                for(int j = 0; j < 52; j++) {
+                    mem[i][j] += mem[i-1][j];
+                }
+            }
+
+            int l = Math.Max(0, i - minLen), r = i;
+            while(l <= r) {
+                int mid = l + (r - l) / 2;
+                if((i - mid + 1 < minLen) && ckValid(mid, i)) {
+                    minLen = i - mid + 1;
+                    minStart = mid;
+                    l = mid + 1;
+                }
+                else if(i - mid + 1 == minLen){
+                    l = mid + 1;
+                }
+                else {
+                    r = mid - 1;
+                }
+            }
+        }
+
+        if(minLen == s.Length + 1) return "";
+        return s.Substring(minStart, minLen);
     }
 }
