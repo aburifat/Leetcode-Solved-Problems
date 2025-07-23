@@ -3,8 +3,7 @@ name: Sync Leetcode
 on:
   workflow_dispatch:
   schedule:
-    - cron:  '0 0 * * *'
-
+    - cron: "0 0 * * *"
 
 jobs:
   build:
@@ -12,11 +11,9 @@ jobs:
 
     steps:
       - name: Sync
-        uses: joshcai/leetcode-sync@v1.5
+        uses: joshcai/leetcode-sync@v1.7
         with:
           github-token: ${{ github.token }}
           leetcode-csrf-token: ${{ secrets.LEETCODE_CSRF_TOKEN }}
           leetcode-session: ${{ secrets.LEETCODE_SESSION }}
-          destination-folder: "AC-Submissions"
-          verbose: true
-          commit-header: '[LeetCode Sync]'
+          commit-header: "[LeetCode Sync]"
